@@ -1,4 +1,5 @@
 import Link from "next/link";
+import EnvironmentCheck from "./components/EnvironmentCheck";
 
 /**
  * 英雄区域组件
@@ -98,6 +99,8 @@ export default function Home() {
     <>
       <HeroSection />
       <FeaturesSection />
+      {/* 环境检查组件 - 用于诊断 Ant Design 兼容性 */}
+      <EnvironmentCheck />
     </>
   );
 }

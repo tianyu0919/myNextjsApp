@@ -1,8 +1,12 @@
+// 兼容包必须在最顶部引入，在其他所有导入之前
+import "@ant-design/v5-patch-for-react-19";
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
+import AntdConfig from "./components/AntdConfig";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,13 +33,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="min-h-screen bg-gray-50">
-          <Navigation />
-          <main className="min-h-[calc(100vh-65px-293px)]">
-            {children}
-          </main>
-          <Footer />
-        </div>
+        <AntdConfig>
+          <div className="min-h-screen bg-gray-50">
+            <Navigation />
+            <main className="min-h-[calc(100vh-65px-293px)]">{children}</main>
+            <Footer />
+          </div>
+        </AntdConfig>
       </body>
     </html>
   );

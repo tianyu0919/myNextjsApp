@@ -3,7 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import LinkButton from "@/components/LinkButton";
+import { Button, App } from "antd";
 
 /**
  * 导航栏组件
@@ -13,6 +15,7 @@ import { useState } from "react";
 export default function Navigation() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { message } = App.useApp(); // 使用 App 上下文获取 message 实例
 
   /**
    * 切换移动端菜单的展开/收起状态
@@ -26,6 +29,19 @@ export default function Navigation() {
    */
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
+  };
+
+  useEffect(() => {
+    console.log('pathname', pathname);
+    // 使用 App 上下文的 message 实例，避免静态方法上下文问题
+    message.info(`当前路径: ${pathname}`);
+  }, [pathname, message]);
+
+  /**
+   * 测试 Ant Design 组件功能
+   */
+  const testAntdComponents = () => {
+    message.success('Ant Design 组件工作正常！');
   };
 
   return (
@@ -50,26 +66,32 @@ export default function Navigation() {
             {/* 桌面端导航链接 */}
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                <Link
+                <LinkButton
                   href="/"
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                     pathname === "/"
                       ? "bg-blue-100 text-blue-700 border-b-2 border-blue-700"
                       : "text-gray-900 hover:text-blue-600 hover:bg-gray-50"
                   }`}
+                  type={pathname === "/" ? "primary" : "default"}
                 >
                   首页
-                </Link>
-                <Link
+                </LinkButton>
+                <LinkButton
                   href="/blog"
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                     pathname === "/blog"
                       ? "bg-blue-100 text-blue-700 border-b-2 border-blue-700"
                       : "text-gray-900 hover:text-blue-600 hover:bg-gray-50"
                   }`}
+                  type={pathname === "/blog" ? "primary" : "default"}
                 >
                   博客
-                </Link>
+                </LinkButton>
+                {/* 测试 Ant Design 按钮 */}
+                <Button type="primary" onClick={testAntdComponents}>
+                  测试 Antd
+                </Button>
               </div>
             </div>
 
@@ -127,7 +149,7 @@ export default function Navigation() {
         {/* 菜单内容 */}
         <div className="p-6">
           <nav className="space-y-4">
-            <Link
+            <LinkButton
               href="/"
               className={`block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${
                 pathname === "/"
@@ -137,8 +159,8 @@ export default function Navigation() {
               onClick={closeMobileMenu}
             >
               首页
-            </Link>
-            <Link
+            </LinkButton>
+            <LinkButton
               href="/blog"
               className={`block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${
                 pathname === "/blog"
@@ -148,7 +170,7 @@ export default function Navigation() {
               onClick={closeMobileMenu}
             >
               博客
-            </Link>
+            </LinkButton>
           </nav>
         </div>
       </div>
