@@ -1,11 +1,11 @@
 // PostgreSQL数据库连接配置
 
-import { Pool, PoolClient, QueryResult } from 'pg';
+import { Pool, PoolClient, QueryResult, QueryResultRow } from 'pg';
 
 // 在Next.js中，环境变量会自动从.env文件加载，无需额外配置
 
-
-console.log(process.env)
+// 注意：实际生产环境中应避免打印process.env，可能会泄露敏感信息
+// console.log(process.env)
 // 创建数据库连接池
 const pool = new Pool({
   host: process.env.DB_HOST || 'localhost',
@@ -37,7 +37,7 @@ pool.on('remove', (client) => {
  * @param params 查询参数
  * @returns 查询结果
  */
-export async function query(text: string, params?: any[]): Promise<QueryResult> {
+export async function query<T extends QueryResultRow>(text: string, params?: Array<unknown>): Promise<QueryResult<T>> {
   const start = Date.now();
   
   try {
@@ -85,14 +85,15 @@ export async function getClient(): Promise<PoolClient> {
   };
   
   // 创建一个包装的客户端对象，保持原始方法不变
-  const wrappedClient = {
-    ...client,
-    query: async (text: string, params?: any[]): Promise<QueryResult> => {
-      if (process.env.NODE_ENV !== 'production' || process.env.DB_LOGGING === 'true') {
-        logger(`执行SQL: ${text}`);
-      }
-      return client.query(text, params);
-    },
+    const wrappedClient = {
+      ...client,
+      query: async <T extends QueryResultRow>(text: string, params?: Array<unknown>): Promise<QueryResult<T>> => {
+        if (process.env.NODE_ENV !== 'production' || process.env.DB_LOGGING === 'true') {
+          logger(`执行SQL: ${text}`);
+        }
+        // 使用类型断言确保返回类型正确
+        return client.query(text, params) as Promise<QueryResult<T>>;
+      },
     release: (): void => {
       logger('释放客户端连接');
       client.release();
@@ -152,7 +153,9 @@ export async function closePool(): Promise<void> {
 // 但通常建议使用上面的query或getClient函数来执行查询
 export default pool;
 
-// 自动检查数据库连接
-if (process.env.NODE_ENV !== 'test') {
-  checkConnection();
+// 自动检查数据库连接（仅在服务器端执行）
+if (typeof window === 'undefined' && process.env.NODE_ENV !== 'test') {
+  checkConnection().catch(err => {
+    console.error('数据库连接检查失败:', err);
+  });
 }

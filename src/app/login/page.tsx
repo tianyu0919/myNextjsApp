@@ -3,9 +3,9 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Card, Typography, message, Space } from 'antd';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const { Title, Text } = Typography;
-const { Password } = Input;
 
 /**
  * 登录页面组件
@@ -76,11 +76,15 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <img 
-            className="mx-auto h-16 w-auto" 
-            src="/next.svg" 
-            alt="Logo" 
-          />
+          <div className="w-16 h-16 mx-auto">
+            <Image 
+              src="/next.svg" 
+              alt="Logo" 
+              width={64} 
+              height={64} 
+              className="object-contain"
+            />
+          </div>
           <Title level={2} className="mt-4 text-gray-900">
             欢迎回来
           </Title>

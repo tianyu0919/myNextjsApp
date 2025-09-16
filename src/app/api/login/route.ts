@@ -5,7 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withApiMiddleware } from '@/lib/api-middleware';
 import { HttpStatus, ErrorMessages } from '@/lib/api-response';
-import { validateCredentials, generateAuthToken, setAuthCookie, User } from '@/lib/auth';
+import { validateCredentials, generateAuthToken, setAuthCookie } from '@/lib/auth';
 
 /**
  * 登录请求体接口

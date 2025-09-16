@@ -35,20 +35,6 @@ async function checkDatabaseConnection() {
     // 构建错误响应
     const errorMessage = error instanceof Error ? error.message : String(error);
     
-    // 创建包含详细错误信息的响应对象
-    const errorResponseBody = {
-      connected: false,
-      error: errorMessage,
-      timestamp: new Date().toISOString(),
-      // 提供一些调试建议
-      debugSuggestions: [
-        '检查PostgreSQL服务是否正在运行',
-        '确认.env.local文件中的数据库配置是否正确',
-        '验证数据库用户是否有权限访问blog_app数据库',
-        '确保schema.sql脚本已成功执行'
-      ]
-    };
-    
     return wrapResponse.error(
       ErrorMessages.INTERNAL_ERROR,
       HttpStatus.INTERNAL_SERVER_ERROR,

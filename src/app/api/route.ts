@@ -10,7 +10,7 @@ import { wrapResponse, HttpStatus, ErrorMessages } from '@/lib/api-response';
  * GET 请求处理器
  * 返回简单的问候信息
  */
-async function handleGet(_request: Request) {
+async function handleGet() {
   const data = {
     message: "Hello, world!",
     timestamp: new Date().toISOString(),
@@ -38,7 +38,7 @@ async function handlePost(request: Request) {
     };
 
     return wrapResponse.success(data, "数据创建成功", HttpStatus.CREATED);
-  } catch (_error) {
+  } catch {
     return wrapResponse.error(
       ErrorMessages.VALIDATION_ERROR,
       HttpStatus.BAD_REQUEST,
@@ -63,7 +63,7 @@ async function handlePut(request: Request) {
     };
 
     return wrapResponse.success(data, "数据更新成功", HttpStatus.OK);
-  } catch (_error) {
+  } catch {
     return wrapResponse.error(
       ErrorMessages.VALIDATION_ERROR,
       HttpStatus.BAD_REQUEST,
@@ -76,7 +76,7 @@ async function handlePut(request: Request) {
  * DELETE 请求处理器
  * 处理 DELETE 请求并返回响应
  */
-async function handleDelete(_request: Request) {
+async function handleDelete() {
   const data = {
     message: "DELETE request received",
     timestamp: new Date().toISOString(),
@@ -102,7 +102,7 @@ async function handlePatch(request: Request) {
     };
 
     return wrapResponse.success(data, "数据部分更新成功", HttpStatus.OK);
-  } catch (_error) {
+  } catch {
     return wrapResponse.error(
       ErrorMessages.VALIDATION_ERROR,
       HttpStatus.BAD_REQUEST,
@@ -120,13 +120,13 @@ async function handleRequest(request: Request) {
 
   switch (method) {
     case 'GET':
-      return handleGet(request);
+      return handleGet();
     case 'POST':
       return handlePost(request);
     case 'PUT':
       return handlePut(request);
     case 'DELETE':
-      return handleDelete(request);
+      return handleDelete();
     case 'PATCH':
       return handlePatch(request);
     case 'HEAD':
