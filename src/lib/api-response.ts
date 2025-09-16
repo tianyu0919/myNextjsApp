@@ -7,13 +7,12 @@
  * 标准 API 响应接口
  */
 export interface ApiResponse<T = unknown> {
-  success: boolean;
   data?: T;
   error?: string;
-  message?: string;
+  msg?: string;
   timestamp: string;
   requestId?: string;
-  statusCode: number;
+  code: number;
 }
 
 /**
@@ -25,11 +24,10 @@ export class ApiResponseBuilder {
    */
   static success<T>(data: T, message?: string, statusCode: number = 200): Response {
     const response: ApiResponse<T> = {
-      success: true,
       data,
-      message: message || '操作成功',
+      msg: message || '操作成功',
       timestamp: new Date().toISOString(),
-      statusCode
+      code: statusCode
     };
 
     return new Response(JSON.stringify(response), {
@@ -46,11 +44,10 @@ export class ApiResponseBuilder {
    */
   static error(error: string, statusCode: number = 500, message?: string): Response {
     const response: ApiResponse = {
-      success: false,
       error,
-      message: message || '操作失败',
+      msg: message || '操作失败',
       timestamp: new Date().toISOString(),
-      statusCode
+      code: statusCode
     };
 
     return new Response(JSON.stringify(response), {
@@ -86,7 +83,6 @@ export class ApiResponseBuilder {
         hasPrev: boolean;
       };
     }> = {
-      success: true,
       data: {
         data,
         pagination: {
@@ -98,13 +94,13 @@ export class ApiResponseBuilder {
           hasPrev
         }
       },
-      message: message || '获取数据成功',
+      msg: message || '获取数据成功',
       timestamp: new Date().toISOString(),
-      statusCode: 200
+      code: HttpStatus.OK
     };
 
     return new Response(JSON.stringify(response), {
-      status: 200,
+      status: HttpStatus.OK,
       headers: {
         'Content-Type': 'application/json',
         'Cache-Control': 'no-cache'

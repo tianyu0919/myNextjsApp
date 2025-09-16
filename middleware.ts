@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 
 /**
  * Next.js 中间件
- * 处理全局状态码、错误处理和响应标准化
+ * 处理全局状态码、错误处理、响应标准化和用户认证
  */
 export function middleware(request: NextRequest) {
   // 获取请求路径
@@ -11,6 +11,30 @@ export function middleware(request: NextRequest) {
   
   // 记录请求信息
   console.log(`[${new Date().toISOString()}] ${request.method} ${path}`)
+  
+  // 公开路径，不需要认证
+  const publicPaths = ['/login', '/api/login'];
+  
+  // 检查是否为公开路径
+  const isPublicPath = publicPaths.some(publicPath => 
+    path === publicPath || path.startsWith(`${publicPath}/`)
+  );
+  
+  // 检查认证状态
+  const authToken = request.cookies.get('auth_token')?.value;
+  const userId = request.cookies.get('user_id')?.value;
+  const isAuthenticated = !!authToken && !!userId;
+  
+  // 如果不是公开路径且未登录，重定向到登录页面
+  if (!isPublicPath && !isAuthenticated) {
+    console.log(`未登录用户尝试访问受保护路径: ${path}，重定向到登录页面`);
+    
+    // 保存原始访问路径，登录后可以重定向回来
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('redirect', path);
+    
+    return NextResponse.redirect(loginUrl);
+  }
   
   // 继续处理请求
   const response = NextResponse.next()

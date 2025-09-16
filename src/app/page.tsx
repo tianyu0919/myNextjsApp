@@ -2,7 +2,28 @@
 
 import Link from "next/link";
 import EnvironmentCheck from "./components/EnvironmentCheck";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { HttpStatus } from "@/lib/api-response";
+
+// 定义API响应类型
+interface DatabaseStatusResponse {
+  data?: {
+    connected: boolean;
+    users: Array<{
+      id: string;
+      username: string;
+      email: string;
+      role: string;
+      createdAt: string;
+    }>;
+    userCount: number;
+    timestamp: string;
+  };
+  error?: string;
+  message?: string;
+  timestamp: string;
+  code: number;
+}
 
 /**
  * 英雄区域组件
@@ -132,6 +153,156 @@ function FeaturesSection() {
 }
 
 /**
+ * 数据库连接状态组件
+ * 通过API获取并显示数据库连接状态和用户表数据
+ */
+function DatabaseStatus() {
+  const [connectionStatus, setConnectionStatus] = useState<string>("检查中...");
+  const [users, setUsers] = useState<
+    Array<{
+      id: string;
+      username: string;
+      email: string;
+      role: string;
+      createdAt: string;
+    }>
+  >([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const checkDatabaseConnection = async () => {
+      try {
+        setConnectionStatus("尝试连接数据库...");
+
+        // 通过API获取数据库状态和用户数据
+        const response = await fetch("/api/database", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const data: DatabaseStatusResponse = await response.json();
+
+        if (data.code === HttpStatus.OK && data.data?.connected) {
+          setUsers(data.data.users || []);
+          setConnectionStatus(
+            data.data.userCount > 0
+              ? `数据库连接成功！共找到 ${data.data.userCount} 个用户。`
+              : "数据库连接成功，但users表为空"
+          );
+        } else {
+          setError(data.error || data.message || "未知错误");
+          setConnectionStatus("数据库连接失败");
+          console.error("数据库连接错误:", data);
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : String(err));
+        setConnectionStatus("数据库连接失败");
+        console.error("API请求错误:", err);
+      }
+    };
+
+    checkDatabaseConnection();
+  }, []);
+
+  return (
+    <section className="py-12 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            数据库连接状态
+          </h2>
+          <p className={`text-lg ${error ? "text-red-600" : "text-green-600"}`}>
+            {connectionStatus}
+          </p>
+          {error && (
+            <div className="mt-4 p-4 bg-red-100 rounded-lg text-red-800">
+              <p>错误信息: {error}</p>
+              <p className="mt-2 text-sm">
+                请检查.env.local文件中的数据库配置是否正确，以及PostgreSQL服务是否运行。
+              </p>
+            </div>
+          )}
+        </div>
+
+        {users.length > 0 && (
+          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      ID
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      用户名
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      邮箱
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      角色
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      创建时间
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {users.map((user) => (
+                    <tr key={user.id}>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {user.id}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {user.username}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {user.email}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            user.role === "admin"
+                              ? "bg-blue-100 text-blue-800"
+                              : "bg-green-100 text-green-800"
+                          }`}
+                        >
+                          {user.role}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {new Date(user.createdAt).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+/**
  * 首页主组件
  * 现在只包含页面特有的内容，导航栏和页脚已在全局布局中
  */
@@ -148,6 +319,8 @@ export default function Home() {
     <>
       <HeroSection />
       <FeaturesSection />
+      {/* 数据库连接状态组件 */}
+      <DatabaseStatus />
       {/* 环境检查组件 - 用于诊断 Ant Design 兼容性 */}
       <EnvironmentCheck />
     </>
