@@ -22,12 +22,35 @@ export default function Home() {
       <HeroSection />
       <FeaturesSection />
       <Shuffle text="Loading..." />
-      <ShinyText
-        text="Just some shiny text!"
-        disabled={false}
-        speed={5}
-        className="text-4xl"
-      />
+      <div className="space-y-4">
+        <ShinyText
+          text="默认黑色闪光文字"
+          disabled={false}
+          speed={5}
+          className="text-4xl"
+        />
+        <ShinyText
+          text="红色闪光文字"
+          color="#ff0000"
+          opacity={0.9}
+          speed={3}
+          className="text-4xl"
+        />
+        <ShinyText
+          text="蓝色闪光文字"
+          color="blue"
+          opacity={0.7}
+          speed={4}
+          className="text-4xl"
+        />
+        <ShinyText
+          text="绿色闪光文字"
+          color="rgb(0, 255, 0)"
+          opacity={0.8}
+          speed={6}
+          className="text-4xl"
+        />
+      </div>
 
       {/* 数据获取组件 - 在服务器端获取数据并传递给展示组件 */}
       <DataFetcher>
