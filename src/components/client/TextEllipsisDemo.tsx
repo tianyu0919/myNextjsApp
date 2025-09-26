@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import TextEllipsis from "@/components/shared/TextEllipsis";
-import { Button } from "antd";
+import { Button, Space } from "antd";
 import init, { add, greet, fibonacci } from "../../../pkg/rust_wasm_browser";
 
 /**
@@ -112,7 +112,7 @@ function TextEllipsisDemo() {
             Rust WASM 功能测试
           </h3>
           <div className="space-x-4">
-            <Button.Group>
+            <Space.Compact>
               <Button
                 disabled={!wasmLoaded}
                 onClick={() => {
@@ -147,7 +147,7 @@ function TextEllipsisDemo() {
               >
                 {wasmLoaded ? "测试斐波那契数列" : "WASM 加载中..."}
               </Button>
-            </Button.Group>
+            </Space.Compact>
           </div>
           <div className="mt-4 p-10 bg-white rounded-lg block">
             <div>结果：{result}</div>

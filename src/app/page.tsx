@@ -11,6 +11,8 @@ import DataFetcher from "@/components/server/DataFetcher";
 // 导入客户端组件
 import EnvironmentCheck from "@/components/client/EnvironmentCheck";
 import TextEllipsisDemo from "@/components/client/TextEllipsisDemo";
+import Shuffle from "@/components/ReactBits/Shuffle";
+import ShinyText from "@/components/ReactBits/ShinyText";
 
 export default function Home() {
   // 首页组件现在非常简洁，只负责组装不同类型的组件
@@ -19,6 +21,13 @@ export default function Home() {
       {/* 服务端组件 - 直接在服务器端渲染 */}
       <HeroSection />
       <FeaturesSection />
+      <Shuffle text="Loading..." />
+      <ShinyText
+        text="Just some shiny text!"
+        disabled={false}
+        speed={5}
+        className="text-4xl"
+      />
 
       {/* 数据获取组件 - 在服务器端获取数据并传递给展示组件 */}
       <DataFetcher>
