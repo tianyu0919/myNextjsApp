@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import TextEllipsis from "@/components/shared/TextEllipsis";
 import { Button } from "antd";
-import init, { add, greet } from "../../../pkg/rust_wasm_browser";
+import init, { add, greet, fibonacci } from "../../../pkg/rust_wasm_browser";
 
 /**
  * TextEllipsis 组件演示 - 客户端组件
@@ -11,7 +11,7 @@ import init, { add, greet } from "../../../pkg/rust_wasm_browser";
  */
 function TextEllipsisDemo() {
   const [wasmLoaded, setWasmLoaded] = useState(false);
-
+  const [result, setResult] = useState<string | number>(0);
   // 初始化 WASM 模块
   useEffect(() => {
     const loadWasm = async () => {
@@ -112,27 +112,45 @@ function TextEllipsisDemo() {
             Rust WASM 功能测试
           </h3>
           <div className="space-x-4">
-            <Button
-              disabled={!wasmLoaded}
-              onClick={() => {
-                if (wasmLoaded) {
-                  const result = add(BigInt(1), BigInt(2));
-                  console.log("Add result:", result);
-                }
-              }}
-            >
-              {wasmLoaded ? "测试加法 (1+2)" : "WASM 加载中..."}
-            </Button>
-            <Button
-              disabled={!wasmLoaded}
-              onClick={() => {
-                if (wasmLoaded) {
-                  greet("Hello from Rust WASM!");
-                }
-              }}
-            >
-              {wasmLoaded ? "测试问候" : "WASM 加载中..."}
-            </Button>
+            <Button.Group>
+              <Button
+                disabled={!wasmLoaded}
+                onClick={() => {
+                  if (wasmLoaded) {
+                    const result = add(BigInt(1), BigInt(2));
+                    setResult(Number(result));
+                  }
+                }}
+              >
+                {wasmLoaded ? "测试加法 (1+2)" : "WASM 加载中..."}
+              </Button>
+              <Button
+                disabled={!wasmLoaded}
+                onClick={() => {
+                  if (wasmLoaded) {
+                    const str = greet("Hello from Rust WASM!");
+                    setResult(str);
+                  }
+                }}
+              >
+                {wasmLoaded ? "测试问候" : "WASM 加载中..."}
+              </Button>
+              <Button
+                disabled={!wasmLoaded}
+                onClick={() => {
+                  if (wasmLoaded) {
+                    const a = fibonacci(10);
+                    console.log(a);
+                    setResult(Number(a));
+                  }
+                }}
+              >
+                {wasmLoaded ? "测试斐波那契数列" : "WASM 加载中..."}
+              </Button>
+            </Button.Group>
+          </div>
+          <div className="mt-4 p-10 bg-white rounded-lg block">
+            <div>结果：{result}</div>
           </div>
           <p className="text-sm text-green-600 mt-2">
             {wasmLoaded ? "✅ WASM 模块已加载" : "⏳ WASM 模块加载中..."}
