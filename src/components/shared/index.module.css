@@ -1,0 +1,8 @@
+.textEllipsis {
+  display: -webkit-box;
+  -webkit-line-clamp: var(--max-lines, 2);
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+  cursor: var(--cursor, default);
+}

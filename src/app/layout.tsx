@@ -7,6 +7,7 @@ import "./globals.css";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import AntdConfig from "./components/AntdConfig";
+import "@arco-design/web-react/dist/css/arco.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
