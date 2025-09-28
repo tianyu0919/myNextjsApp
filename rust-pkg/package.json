@@ -1,0 +1,15 @@
+{
+  "name": "rust-wasm-browser",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "rust_wasm_browser_bg.wasm",
+    "rust_wasm_browser.js",
+    "rust_wasm_browser.d.ts"
+  ],
+  "main": "rust_wasm_browser.js",
+  "types": "rust_wasm_browser.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

@@ -13,6 +13,7 @@ import EnvironmentCheck from "@/components/client/EnvironmentCheck";
 import TextEllipsisDemo from "@/components/client/TextEllipsisDemo";
 import Shuffle from "@/components/ReactBits/Shuffle";
 import ShinyText from "@/components/ReactBits/ShinyText";
+import Loading from "@/components/Loading";
 
 export default function Home() {
   // 首页组件现在非常简洁，只负责组装不同类型的组件
@@ -68,6 +69,37 @@ export default function Home() {
       {/* 客户端组件 - 会在客户端水合并运行 */}
       <EnvironmentCheck />
       <TextEllipsisDemo />
+      
+      {/* Loading 组件演示 */}
+      <div className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Lottie Loading 动画
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              使用 lottie-react 实现的精美加载动画
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800">小尺寸</h3>
+              <Loading size={50} />
+            </div>
+            
+            <div className="text-center">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800">中尺寸</h3>
+              <Loading size={100} />
+            </div>
+            
+            <div className="text-center">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800">大尺寸</h3>
+              <Loading size={150} />
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

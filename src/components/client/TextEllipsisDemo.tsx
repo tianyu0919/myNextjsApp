@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import TextEllipsis from "@/components/shared/TextEllipsis";
 import { Button, Space } from "antd";
-import init, { add, greet, fibonacci } from "../../../pkg/rust_wasm_browser";
+import init, { add, greet, fibonacci } from "../../../rust-pkg/rust_wasm_browser";
 
 /**
  * TextEllipsis 组件演示 - 客户端组件
