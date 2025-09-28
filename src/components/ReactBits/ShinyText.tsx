@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 
 interface ShinyTextProps {
   text: string;
@@ -151,9 +152,11 @@ const ShinyText: React.FC<ShinyTextProps> = ({
 
   return (
     <div
-      className={`bg-clip-text inline-block ${
-        disabled ? "" : "animate-shine"
-      } ${className}`}
+      className={clsx(
+        "bg-clip-text inline-block",
+        !disabled && "animate-shine",
+        className
+      )}
       style={{
         backgroundImage: `linear-gradient(120deg, rgba(255, 255, 255, 0) 40%, ${rgbaColor} 50%, rgba(255, 255, 255, 0) 60%)`,
         backgroundSize: "200% 100%",

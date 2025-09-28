@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { Popover, PopoverProps } from "@arco-design/web-react";
-import classNames from "classnames";
+import clsx from "clsx";
 import styles from "./index.module.css";
 
 /**
@@ -83,7 +83,7 @@ const TextEllipsis: React.FC<TextEllipsisProps> = ({
   const renderText = () => (
     <div
       ref={textRef}
-      className={classNames(styles.textEllipsis, className)}
+      className={clsx(styles.textEllipsis, className)}
       style={ellipsisStyle}
     >
       {children}

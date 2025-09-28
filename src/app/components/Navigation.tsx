@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import LinkButton from "@/components/LinkButton";
 import { Button, App } from "antd";
+import clsx from "clsx";
 
 /**
  * 导航栏组件
@@ -68,22 +69,24 @@ export default function Navigation() {
               <div className="ml-10 flex items-baseline space-x-4">
                 <LinkButton
                   href="/"
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  className={clsx(
+                    "px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200",
                     pathname === "/"
                       ? "bg-blue-100 text-blue-700 border-b-2 border-blue-700"
                       : "text-gray-900 hover:text-blue-600 hover:bg-gray-50"
-                  }`}
+                  )}
                   type={pathname === "/" ? "primary" : "default"}
                 >
                   首页
                 </LinkButton>
                 <LinkButton
                   href="/blog"
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  className={clsx(
+                    "px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200",
                     pathname === "/blog"
                       ? "bg-blue-100 text-blue-700 border-b-2 border-blue-700"
                       : "text-gray-900 hover:text-blue-600 hover:bg-gray-50"
-                  }`}
+                  )}
                   type={pathname === "/blog" ? "primary" : "default"}
                 >
                   博客
@@ -129,9 +132,10 @@ export default function Navigation() {
 
       {/* 移动端侧边菜单 */}
       <div 
-        className={`fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out md:hidden ${
+        className={clsx(
+          "fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out md:hidden",
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        )}
       >
         {/* 菜单头部 */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
@@ -151,22 +155,24 @@ export default function Navigation() {
           <nav className="space-y-4">
             <LinkButton
               href="/"
-              className={`block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${
+              className={clsx(
+                "block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200",
                 pathname === "/"
                   ? "bg-blue-100 text-blue-700 border-l-4 border-blue-700"
                   : "text-gray-900 hover:text-blue-600 hover:bg-gray-50"
-              }`}
+              )}
               onClick={closeMobileMenu}
             >
               首页
             </LinkButton>
             <LinkButton
               href="/blog"
-              className={`block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${
+              className={clsx(
+                "block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200",
                 pathname === "/blog"
                   ? "bg-blue-100 text-blue-700 border-l-4 border-blue-700"
                   : "text-gray-900 hover:text-blue-600 hover:bg-gray-50"
-              }`}
+              )}
               onClick={closeMobileMenu}
             >
               博客

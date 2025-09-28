@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import clsx from "clsx";
 
 interface LoadingProps {
   size?: number;
@@ -346,7 +347,7 @@ const Loading: React.FC<LoadingProps> = ({
   };
 
   return (
-    <div className={`flex items-center justify-center ${className}`}>
+    <div className={clsx("flex items-center justify-center", className)}>
       {renderLoader()}
     </div>
   );
